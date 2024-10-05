@@ -9,10 +9,10 @@ class Node:
     # preorder 방식으로 순회
     def __iter__(self):
         if self != None:
-            yield self
             if self.left != None:
                 for leftSubTree in self.left:
                     yield leftSubTree
+            yield self
             if self.right != None: 
                 for rightSubTree in self.right:
                     yield rightSubTree
@@ -216,7 +216,7 @@ class BST:
             print("\n    - Tree Structure  | " + line, end="")  # 각 줄에 들여쓰기 추가
         print("\n    - Preorder        | ", end="")
         self.preorder(self.root)
-        print("\n    - Postorder       | ", end="")
-        self.postorder(self.root)
+        print("\n    - inorder         | ", end="")
+        self.inorder(self.root)
         print("\n    - Tree height     | ", self.height)
         print("    - Number of Node  | ", self.size)
