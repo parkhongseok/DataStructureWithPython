@@ -208,12 +208,33 @@ class BST:
         print("Unbalanced Point : ", s)
         self.update_height(s)
         return x
-
+    
+    def print_binary_tree_structure(self, node, prefix="", is_left=True):
+        if node is not None:
+            # 현재 노드 출력
+            if self.root == node:
+                print(prefix + "└── " + f"{node}(h={node.height})")
+            else:
+                print(prefix + ("├── " if is_left else "└── ") + f"{node}(h={node.height})")
+            
+            
+            if node.left or node.right:
+                if node.left:  # 왼쪽 자식이 있는 경우
+                    self.print_binary_tree_structure(node.left, prefix + ("│    " if is_left else "     "), True)
+                else:  # 왼쪽 자식이 없으면 None을 출력
+                    print(prefix + ("│    " if is_left else "    ") + "└── None")
+                    
+                if node.right:  # 오른쪽 자식이 있는 경우
+                    self.print_binary_tree_structure(node.right, prefix + ("│    " if is_left else "     "), False)
+                else:  # 오른쪽 자식이 없으면 None을 출력
+                    print(prefix + ("│    " if is_left else "     ") + "└── None")
+                    
     def printInfo(self):
         print("\n=>  info")
-        tree_structure = str(self).split("\n")  # __str__에서 나온 결과를 줄 단위로 나눔
-        for line in tree_structure:
-            print("\n    - Tree Structure  | " + line, end="")  # 각 줄에 들여쓰기 추가
+        self.print_binary_tree_structure(self.root)
+        # tree_structure = str(self).split("\n")  # __str__에서 나온 결과를 줄 단위로 나눔
+        # for line in tree_structure:
+        #     print("\n    - Tree Structure  | " + line, end="")  # 각 줄에 들여쓰기 추가
         print("\n    - Preorder        | ", end="")
         self.preorder(self.root)
         print("\n    - inorder         | ", end="")
