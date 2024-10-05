@@ -148,96 +148,161 @@ class BST:
             return None
 
 
+    # def deleteByMerging(self, key):
+    #     x = self.search(key)
+    #     if x == None: return None
+    #     else: pass
+    #     # 상황 : x를 삭제하려고 한다. (삭제할 노드를 x, x의 부모를 pt, x의 left를 a, right를 b라고 하자)
+    #     a, b, pt = x.left, x.right, x.parent
+    #     s = None
+    #     # case1. a노드의 존재 유무 (x의 빈자리 쟁탈전)
+    #     if a == None:
+    #     # x자리에 올 노드를 c라고 부르자. (일종의 c를 두고 ab가 대결하는 구도) => a의 존재여부만 가림, b는 2차전에서 c존재 여부로 확인 
+    #         c = b
+    #         s = b
+    #     else:
+    #         # 왕좌를 차지한 a
+    #         c = a
+    #         # a의 가장 오른쪽 리프 노드를 찾기 위해 a의 암행어사 생성
+    #         m = a
+    #         # 그런 뒤에 a의 가장 오른쪽 리프노드 m을 찾고
+    #         while m.right != None :
+    #             m = m.right
+    #         # b는 처절하게 m을 부모로 인정함
+    #         if b != None:
+    #             b.parent = m
+    #         # b가 존재하거나 말거나, 암행어서 m은 (b를 자식으로 삼음)
+    #         m.right=b
+    #         s = m
+    #     #왕좌에 앉기 게임의 1차전이 끝났고 이제 선대에게 인정받아야함
+        
+    #     # case2. 지울 노드가 root인지 여부
+    #     if self.root != x:
+    #         # 근데 만약 1차전에서 a도 없고 b도 없었다면 c는 None일 수도 있으니까 일단 살아있는지 확인해야함
+    #         if c:
+    #             # 선대를 자신의 부모로 인정함
+    #             c.parent = pt
+    #             # 부모도 새로운 왕을 인정함
+    #             if  c.key < pt.key:
+    #                 pt.left = c
+    #             else:
+    #                 pt.right = c
+    #         # 근데 1차전에서 다 죽었다면 기존 x자리를 빈자리로 만들어야함
+    #         else:
+    #             if pt.left == x:
+    #                 pt.left = c
+    #             else:
+    #                 pt.right = c  
+
+    #     # 만약 지운 값이 root였다면?
+    #     else:
+    #         #  일단 루트 자리에 새로운 c가 옴
+    #         self.root = c
+    #         # c가 있다면 이전에 섬기던 왕 x를 잊고, 자신이 직접 왕이 되어야함(아무도 의지하지마..!
+    #         if c: 
+    #             c.parent = None
+    #     self.size -= 1
+        
+    #     # a와 b가 모두 존재하는 경우, a의 암행어사로서, 가장 오른쪽 리프노드였던 b는 왼쪽 자식은 있었을 수도 있고, 오른쪽 자식은 없었다. (자신이 오른쪽 끝이니까)
+    #     # 그렇다면 m의 오른자식으로 b를 붙였을 때, m의 높이 정보는 m.left와(있었다면) m.right(b를 포함한 자식들) 과 비교를 해서 쭉 root까지만 업데이트하면 된다.
+    #     print("Unbalanced Point : ", s)
+    #     self.update_height(s)
+    #     return x
+    
+    
     def deleteByMerging(self, key):
         x = self.search(key)
         if x == None: return None
         else: pass
         # 상황 : x를 삭제하려고 한다. (삭제할 노드를 x, x의 부모를 pt, x의 left를 a, right를 b라고 하자)
-        a, b, pt = x.left, x.right, x.parent
-        s = None
+        xL, xR, pt = x.left, x.right, x.parent
+        unBalancedPoint = None
         # case1. a노드의 존재 유무 (x의 빈자리 쟁탈전)
-        if a == None:
-        # x자리에 올 노드를 c라고 부르자. (일종의 c를 두고 ab가 대결하는 구도) => a의 존재여부만 가림, b는 2차전에서 c존재 여부로 확인 
-            c = b
-            s = b
+        if xL == None:
+        # x자리에 올 노드를 c라고 부르자. (일종의 c를 두고 xL과 xR가 대결하는 구도) => xL의 존재여부만 가림, xR는 2차전에서 deletePoint의 존재 여부로 확인 
+            #xL이 없으니까, xR가 deletePoint자리 차지(원래 xR는 xL의 아래로 가야함)
+            deletePoint = xR            #deletePoint는 c로도 표현
+            unBalancedPoint = pt
         else:
-            # 왕좌를 차지한 a
-            c = a
-            # a의 가장 오른쪽 리프 노드를 찾기 위해 a의 암행어사 생성
-            m = a
-            # 그런 뒤에 a의 가장 오른쪽 리프노드 m을 찾고
-            while m.right != None :
-                m = m.right
-            # b는 처절하게 m을 부모로 인정함
-            if b != None:
-                b.parent = m
-            # b가 존재하거나 말거나, 암행어서 m은 (b를 자식으로 삼음)
-            m.right=b
-            s = m
+            # 왕좌를 차지한 xL
+            deletePoint = xL 
+            # xL의 가장 오른쪽 리프 노드를 찾기 위해 xL의 암행어사 rightLeaf 생성
+            rightLeaf = xL
+            # 그런 뒤에 xL의 가장 오른쪽 리프노드 rightLeaf을 찾고
+            while rightLeaf.right != None :
+                rightLeaf = rightLeaf.right
+            # xR는 처절하게 rightLeaf을 부모로 인정함
+            if xR != None:
+                xR.parent = rightLeaf
+            # xR가 존재하거나 말거나, 암행어사 rightLeaf은 (xR를 자식으로 삼음)
+            rightLeaf.right = xR
+            unBalancedPoint = rightLeaf
         #왕좌에 앉기 게임의 1차전이 끝났고 이제 선대에게 인정받아야함
         
         # case2. 지울 노드가 root인지 여부
+        # 루트노드를 지운 게 아닌 경우 (루트 갱신 불필요)
         if self.root != x:
-            # 근데 만약 1차전에서 a도 없고 b도 없었다면 c는 None일 수도 있으니까 일단 살아있는지 확인해야함
-            if c:
+            # 근데 만약 1차전에서 xL도 없고 xR도 없었다면 deletePoint는 None일 수도 있으니까 일단 살아있는지 확인해야함
+            if deletePoint:
                 # 선대를 자신의 부모로 인정함
-                c.parent = pt
+                deletePoint.parent = pt
                 # 부모도 새로운 왕을 인정함
-                if  c.key < pt.key:
-                    pt.left = c
+                if  deletePoint.key < pt.key:
+                    pt.left = deletePoint
                 else:
-                    pt.right = c
-            # 근데 1차전에서 다 죽었다면 기존 x자리를 빈자리로 만들어야함
+                    pt.right = deletePoint
+            # 근데 1차전에서 다 죽었다면 기존 x자리를 빈자리로 만들어야함 deletePioint = None
             else:
                 if pt.left == x:
-                    pt.left = c
+                    pt.left = deletePoint
                 else:
-                    pt.right = c  
-
-        # 만약 지운 값이 root였다면?
+                    pt.right = deletePoint
+        # 만약 지운 값이 root였다면? (루트 갱신 필요)
         else:
-            #  일단 루트 자리에 새로운 c가 옴
-            self.root = c
+            # 일단 루트 자리에 새로운 c가 옴
+            self.root = deletePoint
             # c가 있다면 이전에 섬기던 왕 x를 잊고, 자신이 직접 왕이 되어야함(아무도 의지하지마..!
-            if c: 
-                c.parent = None
+            if deletePoint != None: 
+                deletePoint.parent = None
+            
         self.size -= 1
         
         # a와 b가 모두 존재하는 경우, a의 암행어사로서, 가장 오른쪽 리프노드였던 b는 왼쪽 자식은 있었을 수도 있고, 오른쪽 자식은 없었다. (자신이 오른쪽 끝이니까)
         # 그렇다면 m의 오른자식으로 b를 붙였을 때, m의 높이 정보는 m.left와(있었다면) m.right(b를 포함한 자식들) 과 비교를 해서 쭉 root까지만 업데이트하면 된다.
-        print("Unbalanced Point : ", s)
-        self.update_height(s)
-        return x
-    
-    def print_binary_tree_structure(self, node, prefix="", is_left=True):
+        print("Unbalanced Point : ", unBalancedPoint)
+        self.update_height(unBalancedPoint)
+        return unBalancedPoint 
+
+    # fixed
+    def print_binary_tree_structure(self, node, prefix="", is_left=True, is_root=True):
         if node is not None:
-            # 현재 노드 출력
-            if self.root == node:
-                print(prefix + "└── " + f"{node}(h={node.height})")
+            if is_root:
+                print(f"──── {node}(h={node.height})")
             else:
-                print(prefix + ("├── " if is_left else "└── ") + f"{node}(h={node.height})")
-            
-            
-            if node.left or node.right:
+                print(prefix + (" ├── " if is_left else " └── ") + f"{node}(h={node.height})")
+                
+            if node.left or node.right :
                 if node.left:  # 왼쪽 자식이 있는 경우
-                    self.print_binary_tree_structure(node.left, prefix + ("│    " if is_left else "     "), True)
+                    self.print_binary_tree_structure(node.left, prefix + (" │    " if not is_root and is_left else "      "), True, False)
                 else:  # 왼쪽 자식이 없으면 None을 출력
-                    print(prefix + ("│    " if is_left else "    ") + "└── None")
+                    print(prefix + (" │    " if not is_root and is_left else "      ") + " ├── None")
                     
                 if node.right:  # 오른쪽 자식이 있는 경우
-                    self.print_binary_tree_structure(node.right, prefix + ("│    " if is_left else "     "), False)
+                    self.print_binary_tree_structure(node.right, prefix + (" │    " if not is_root and is_left else "      "), False, False)
                 else:  # 오른쪽 자식이 없으면 None을 출력
-                    print(prefix + ("│    " if is_left else "     ") + "└── None")
+                    print(prefix + (" │    " if is_left else "      ") + " └── None")
+
                     
-    def printInfo(self):
-        print("\n=>  info")
+    def printInfo(self, index="Take me somewhere nice"):
+        print("\n"+str(index))
         self.print_binary_tree_structure(self.root)
         # tree_structure = str(self).split("\n")  # __str__에서 나온 결과를 줄 단위로 나눔
         # for line in tree_structure:
         #     print("\n    - Tree Structure  | " + line, end="")  # 각 줄에 들여쓰기 추가
-        print("\n    - Preorder        | ", end="")
+        print("=>  info")
+        print("    - Preorder        | ", end="")
         self.preorder(self.root)
         print("\n    - inorder         | ", end="")
         self.inorder(self.root)
         print("\n    - Tree height     | ", self.height)
-        print("    - Number of Node  | ", self.size)
+        print("    - Number of Node  | ", self.size, "\n")
