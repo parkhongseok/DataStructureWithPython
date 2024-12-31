@@ -14,7 +14,7 @@
 #### Non-linear Data Structures
 - Hash Table ([Linear Probing](my_hashTable_linearProbing.ipynb) / [Quedratic Probing](my_hashTable_quedraticProbing.ipynb))
 - [Binary Tree](binary_tree.ipynb)
-- Heap ([max Heap](max_heap.ipynb) / [min Heap](min_heap.ipynb))
+- [Heap](max_heap.ipynb)
 - [BST, Binary Search Tree](binary_search_tree.ipynb)
 - [AVL Tree](AVL_tree.ipynb)
 
