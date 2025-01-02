@@ -16,7 +16,7 @@
 - [Binary Tree](binary_tree.ipynb)
 - [Heap](max_heap.ipynb)
 - [BST, Binary Search Tree](binary_search_tree.ipynb)
-- [AVL Tree](AVL_tree.ipynb)
+- Balanced BST([AVL Tree](AVL_tree.ipynb) / RedBlack Tree)
 
 ## contact
 phs1100001@gmail.com
