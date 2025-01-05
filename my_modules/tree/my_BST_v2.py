@@ -1,12 +1,14 @@
 from my_modules.tree.my_node import Node
 from my_modules.tree.my_binary_tree import BinaryTree
+from my_modules.tree.my_node import Node
+from my_modules.tree.my_binary_tree import BinaryTree
 
 class BST(BinaryTree):
     def __init__(self, key=None):
         super().__init__(key)
         self.height = 0
+        
     # 트리 구조 생성
-    
     def _build_tree_structure(self, node, prefix="", is_left=True, is_root=True):
         lines = []
         if node is not None:
@@ -65,25 +67,25 @@ class BST(BinaryTree):
         else: 
             return None
 
-    # 노드 v의 높이를 수정
-    def updateNodeHeight(self, v):
-        # v가 존재한다면,
-        if v:
-            # 해당 노드의 자식이 존재하는지 검사 후, 자식 중에 더 깊이 뻗어있는 자식을 선택해서 현재 높이를 업데이트
-            l = v.left.height if v.left else -1
-            r = v.right.height if v.right else -1
-            # 최대 높이를 가진 자식보단 본인이 한칸 더 크니까
-            v.height = max(l, r) + 1
+    # # 노드 v의 높이를 수정 => BinaryTree 로 이관
+    # def updateNodeHeight(self, v):
+    #     # v가 존재한다면,
+    #     if v:
+    #         # 해당 노드의 자식이 존재하는지 검사 후, 자식 중에 더 깊이 뻗어있는 자식을 선택해서 현재 높이를 업데이트
+    #         l = v.left.height if v.left else -1
+    #         r = v.right.height if v.right else -1
+    #         # 최대 높이를 가진 자식보단 본인이 한칸 더 크니까
+    #         v.height = max(l, r) + 1
 
-    # v부터 root가지 올라가면서 모든 노드 정보 업데이트
-    # 노드를 삽입할 때마다 호출한다면, 언제나 리프노드부터 루트까지 존재하는 높이들을 업데이트 가능
-    def updateHeight(self, v):
-        # v가 루트노드에 도달할때까지 
-        while v != None:
-            # 높이를 갱신하고, 부모노드로 현재노드 이동
-            self.updateNodeHeight(v)
-            v = v.parent
-        self.updateTreeHeight()
+    # # v부터 root가지 올라가면서 모든 노드 정보 업데이트
+    # # 노드를 삽입할 때마다 호출한다면, 언제나 리프노드부터 루트까지 존재하는 높이들을 업데이트 가능
+    # def updateHeight(self, v):
+    #     # v가 루트노드에 도달할때까지 
+    #     while v != None:
+    #         # 높이를 갱신하고, 부모노드로 현재노드 이동
+    #         self.updateNodeHeight(v)
+    #         v = v.parent
+    #     self.updateTreeHeight()
     
     def insert(self, key):
         if key is None: return
@@ -105,7 +107,7 @@ class BST(BinaryTree):
                 # 부모보다 큰 경우 오른쪽에 삽입
                 else:
                     self.insertRight(p, newNode)
-            self.updateHeight(newNode)
+            # self.updateHeight(newNode)
             return newNode   
         # 중복된 key를 삽입 시도
         else:

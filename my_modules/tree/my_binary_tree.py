@@ -1,16 +1,16 @@
 from my_modules.tree.my_node import Node
-
 class BinaryTree:
     def __init__(self, key=None):
         self.root = Node(key)
         self.size = 0 if self.root.key is None else 1
+        self.height = 0
+    
+    def __len__(self):
+        return self.size
 
     # 이터러블 제너레이터
     def __iter__(self):
         yield from self._preorder(self.root)
-        
-    def __len__(self):
-        return self.size
         
     def _preorder(self, node):
         if node:
@@ -44,22 +44,22 @@ class BinaryTree:
         lines = []
         if node is not None:
             if is_root:
-                lines.append(f"──── {node}(root)")
+                lines.append(f"───── {node}(h={node.height})")
             else:
-                lines.append(prefix + ("├── " if is_left else "└── ") + f"{node}")
+                lines.append(prefix + ("├──── " if is_left else "└──── ") + f"{node}(h={node.height})")
                 
             if node.left or node.right:
                 if node.left:  # 왼쪽 자식이 있는 경우
-                    lines.extend(self._build_tree_structure(node.left, prefix + ("│    " if not is_root and is_left else "     "), True, False))
+                    lines.extend(self._build_tree_structure(node.left, prefix + ("│     " if not is_root and is_left else "      "), True, False))
                 else:  # 왼쪽 자식이 없으면 None을 출력
-                    lines.append(prefix + ("│    " if not is_root and is_left else "     ") + "├── None")
+                    lines.append(prefix + ("│     " if not is_root and is_left else "      ") + "├──── None")
                     
                 if node.right:  # 오른쪽 자식이 있는 경우
-                    lines.extend(self._build_tree_structure(node.right, prefix + ("│    " if not is_root and is_left else "     "), False, False))
+                    lines.extend(self._build_tree_structure(node.right, prefix + ("│     " if not is_root and is_left else "      "), False, False))
                 else:  # 오른쪽 자식이 없으면 None을 출력
-                    lines.append(prefix + ("│    " if not is_root and is_left else "     ") + "└── None")
+                    lines.append(prefix + ("│     " if not is_root and is_left else "      ") + "└──── None")
         return lines
-    
+
     def __str__(self):
         return  "\n".join(self._build_tree_structure(self.root))
     
@@ -68,28 +68,38 @@ class BinaryTree:
         Node.left = NewNode
         NewNode.parent = Node
         self.size += 1
-        # print(f"[DEBUG] insertLeft: Node {Node.key}, NewNode {NewNode.key}, Size {self.size}")
-
+        self.updateHeight(Node)
+        
     def insertRight(self, Node, NewNode):
         Node.right = NewNode
         NewNode.parent = Node
         self.size += 1
-        # print(f"[DEBUG] insertRight: Node {Node.key}, NewNode {NewNode.key}, Size {self.size}")
-    # 깊이우선탐색으로 이진트리의 높이 계산
-    
-    def getHeight(self, node):
-        # 기저 조건: 노드가 None이면 높이는 0
-        if node is None:
-            return 0
-        # 왼쪽과 오른쪽 서브트리의 높이를 재귀적으로 계산
-        left_height = self.getHeight(node.left)
-        right_height = self.getHeight(node.right)
-        # 노드의 높이는 왼쪽과 오른쪽 서브트리의 높이 중 큰 값 + 1
-        return max(left_height, right_height)
+        self.updateHeight(Node)
+        # 루트노드가 None인 경우에 대한 예외처리는 상속받은 메서드에서 구현함
+
+    # 노드 v의 높이를 수정
+    def updateNodeHeight(self, v):
+        # v가 존재한다면,
+        if v:
+            # 해당 노드의 자식이 존재하는지 검사 후, 자식 중에 더 깊이 뻗어있는 자식을 선택해서 현재 높이를 업데이트
+            l = v.left.height if v.left else -1
+            r = v.right.height if v.right else -1
+            # 최대 높이를 가진 자식보단 본인이 한칸 더 크니까
+            v.height = max(l, r) + 1
+
+    # v부터 root가지 올라가면서 모든 노드 정보 업데이트
+    # 노드를 삽입할 때마다 호출한다면, 언제나 리프노드부터 루트까지 존재하는 높이들을 업데이트 가능
+    def updateHeight(self, v):
+        # v가 루트노드에 도달할때까지 
+        while v != None:
+            # 높이를 갱신하고, 부모노드로 현재노드 이동
+            self.updateNodeHeight(v)
+            v = v.parent
+        self.updateTreeHeight()
 
     def updateTreeHeight(self):
         if self.root.key is not None:
-            self.height = self.getHeight(self.root)   
+            self.height = self.root.height
         else : 
             self.height = 0  
         return self.height
@@ -101,3 +111,9 @@ class BinaryTree:
         print("    - Preorder        | ", *(i for i in self))
         print("    - Inorder         | ", *(i for i in self.inorder()))
         print("    - Postorder       | ", *(i for i in self.postorder()), "\n")
+        
+    def printInfo(self, msg=None):
+        if msg is not None:
+            print("*** " + msg + " ***")
+        print(self)
+        self.info()
