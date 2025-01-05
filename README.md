@@ -12,11 +12,12 @@
 - [Circular Doubly Linked List](circular_doubly_linked_list.ipynb)
 
 #### Non-linear Data Structures
-- Hash Table ([Linear Probing](my_hashTable_linearProbing.ipynb) / [Quedratic Probing](my_hashTable_quedraticProbing.ipynb))
+- [Hash Table (Linear Probing](my_hashTable_linearProbing.ipynb) / [Quedratic Probing)](my_hashTable_quedraticProbing.ipynb)
 - [Binary Tree](binary_tree.ipynb)
 - [Heap](max_heap.ipynb)
-- [BST, Binary Search Tree](BST.ipynb)
-- Balanced BST([AVL Tree](AVL_tree.ipynb) / RedBlack Tree)
+- [BST, Binary Search Tree](my_BST_v2.ipynb)
+- [Balanced BST(AVL Tree](AVL_tree_v2.ipynb) / RedBlack Tree)
+- 234 Tree
 
 ## contact
 phs1100001@gmail.com
