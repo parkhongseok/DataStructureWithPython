@@ -88,7 +88,7 @@ class BST:
     
     # 사실 findLocation의 일정부분까지만 사용하면 search를 구현할 수 있지만, 코드의 재사용성을 위해 
     # 왜냐면 해당 노드를 찾는다고 해도, key값이 들어갈 자리의 부모를 찾기 위해 똑같은 걸 반복해야하니까.
-    def search(self, key):
+    def search(self, key): # 노드 반환
         #findLocation을 호출하여, 해당 key가 들어가있거나, 들어갈 자리의 부모노드를 호출(만약 아무것도 없으면 None)
         p = self.findLocation(key)
         if p and p.key == key:

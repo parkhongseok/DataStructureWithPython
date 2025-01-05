@@ -85,7 +85,7 @@ class BinaryTree:
         left_height = self.getHeight(node.left)
         right_height = self.getHeight(node.right)
         # 노드의 높이는 왼쪽과 오른쪽 서브트리의 높이 중 큰 값 + 1
-        return max(left_height, right_height) + 1
+        return max(left_height, right_height)
 
     def updateTreeHeight(self):
         if self.root.key is not None:
